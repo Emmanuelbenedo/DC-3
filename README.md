@@ -42,7 +42,8 @@ This screenshot displays the Gobuster output showing all discovered directories.
 
 To identify specific vulnerabilities within the discovered Joomla installation, OWASP JoomScan was executed. This specialized security tool is designed specifically for Joomla security assessment and performs comprehensive vulnerability scanning including version detection, component vulnerability checking, and configuration weakness identification.
 
-**Screenshot placement: Image 5 (OWASP JoomScan results)**
+<img width="1920" height="982" alt="image" src="https://github.com/user-attachments/assets/edf61d8f-1d9e-4d01-a430-57c90f34a718" />
+
 This screenshot shows the JoomScan output during execution. The visible text displays the tool initialization, Joomla version detection showing "Joomla 3.7.0", firewall detection results showing "Firewall not detected", and core Joomla vulnerability assessment showing "Target Joomla core is not vulnerable". This output is critical because while the core installation may not have known exploits, the version number (3.7.0) is crucial for identifying component-level vulnerabilities. The scan also reveals configuration details such as readable info/status files and directory listings.
 
 The output from JoomScan confirmed that the target system is running Joomla 3.7.0 without active firewall protection. While the core installation was deemed not vulnerable to known core exploits, this version number is significant because it is known to contain component-level vulnerabilities, specifically in the com_fields component which handles custom field creation and management.
