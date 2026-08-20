@@ -64,7 +64,8 @@ The reasoning for SQL injection being such a critical vulnerability is that it b
 
 ### Database Credential Extraction
 
-**Screenshot placement: Image 1 (SQL Injection exploit results)**
+<img width="1920" height="982" alt="image" src="https://github.com/user-attachments/assets/8e5a60f7-1054-4e28-8572-a66609fef17f" />
+
 This screenshot displays the Manu Joomla SQL Injection exploiter interface and results. The critical information visible includes:
 - A successful SQL injection attempt against the target 192.168.56.110
 - Extracted database credentials showing username "admin"
