@@ -163,9 +163,7 @@ Upon successful compilation, the `doubleput` binary was executed directly with r
 ./doubleput
 ```
 
-**(VirtualBox_kali-1_12_08_2026_10_19_42.png)**
-
-![Privilege escalation confirmation with pointer reuse success](./screenshots/13-root-escalation-success.png)
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/881b696b-2854-4c9c-9dd4-8afa0bce9575" />
 
 This screenshot shows the completion of privilege escalation with clear confirmation messages. The text displays continuation of pointer reuse exploitation confirmation, the critical message "writev returned successfully. if this worked, you'll have a root shell in <60 seconds." confirming the exploit mechanism, "suid file detected, launching rootshell...", and most importantly "we have root privs now..." confirming root-level access achievement. Additional detailed error information about file extraction and compilation operations is visible, along with ASCII art representation of characters. The "Congratulations are in order. :-)" message indicates challenge completion.
 
