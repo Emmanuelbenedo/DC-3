@@ -149,6 +149,8 @@ cd ebpf_mapfd_doubleput_exploit
 
 The reasoning for each step is critical to understanding the exploitation process. First, `wget` downloads the exploit archive from the internal HTTP server. The download destination is to the current working directory in /tmp on the target system. Second, `unzip` extracts the archive, creating the ebpf_mapfd_doubleput_exploit directory and its contents. Third, `cd` changes to the extracted directory. Finally, `compile.sh` is executed—this is a bash script that invokes the C compiler to compile the exploit source code into a binary executable. The reasoning for requiring compilation is that the exploit is written in C, a compiled language, and must be converted to machine code executable by the target system's CPU.
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/86b4fa39-3573-4ca3-a2d0-2776e4e4dd77" />
+
 This screenshot shows terminal output displaying the download and extraction process. The visible commands show:
 - `nc -lvnp 4444` establishing a netcat listener
 - Connection from 192.168.56.110 (the target system)
