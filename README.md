@@ -131,7 +131,8 @@ Following the establishment of reverse shell connectivity as the www-data user, 
 
 System enumeration revealed that the target system was running a kernel vulnerable to a privilege escalation exploit targeting the eBPF (extended Berkeley Packet Filter) subsystem. Specifically, the vulnerability involves a "double put" technique that exploits pointer reuse in the eBPF map file descriptor handling mechanism.
 
-**Screenshot placement: Image 11 (nmap output showing system details)**
+<img width="1920" height="983" alt="image" src="https://github.com/user-attachments/assets/3be77bf1-adfc-495e-a3d8-e390cd4c1134" />
+
 This screenshot displays detailed nmap output including the line "OS details: Linux 3.2 - 4.14, Linux 3.8 - 3.16" and uptime information "Uptime guess: 0.023 days (since Fri Jun 26 18:51:24 2026)". This information is valuable for kernel version determination, though for privilege escalation purposes, direct examination of the running kernel version is more reliable.
 
 ### Exploit Acquisition and Compilation
@@ -148,7 +149,6 @@ cd ebpf_mapfd_doubleput_exploit
 
 The reasoning for each step is critical to understanding the exploitation process. First, `wget` downloads the exploit archive from the internal HTTP server. The download destination is to the current working directory in /tmp on the target system. Second, `unzip` extracts the archive, creating the ebpf_mapfd_doubleput_exploit directory and its contents. Third, `cd` changes to the extracted directory. Finally, `compile.sh` is executed—this is a bash script that invokes the C compiler to compile the exploit source code into a binary executable. The reasoning for requiring compilation is that the exploit is written in C, a compiled language, and must be converted to machine code executable by the target system's CPU.
 
-**Screenshot placement: Image 12 (wget download and unzip execution)**
 This screenshot shows terminal output displaying the download and extraction process. The visible commands show:
 - `nc -lvnp 4444` establishing a netcat listener
 - Connection from 192.168.56.110 (the target system)
