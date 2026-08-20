@@ -150,9 +150,8 @@ This screenshot shows terminal output displaying the download and extraction pro
 
 The reasoning for each step is critical to understanding the exploitation process. First, `wget` downloads the exploit archive from the internal HTTP server. The download destination is to the current working directory in /tmp on the target system. Second, `unzip` extracts the archive, creating the ebpf_mapfd_doubleput_exploit directory and its contents. Third, `cd` changes to the extracted directory. Finally, `compile.sh` is executed—this is a bash script that invokes the C compiler to compile the exploit source code into a binary executable. The reasoning for requiring compilation is that the exploit is written in C, a compiled language, and must be converted to machine code executable by the target system's CPU.
 
-**(VirtualBox_kali-1_12_08_2026_10_19_25.png)**
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/93bc01c6-f563-4011-a9d5-034c7f8135fc" />
 
-![Compilation process showing pointer reuse exploitation](./screenshots/12-compilation-process.png)
 
 This screenshot displays the continuation of the compilation process and the beginning of exploit execution. Visible text shows compilation warnings regarding pointer casting operations, the message "starting writev", "woohoo, got pointer reuse" - indicating successful pointer reuse exploitation, "writev returned successfully. if this worked, you'll have a root shell in <60 seconds." - confirming the exploit mechanism functioned as intended, and "suid file detected, launching rootshell..." indicating the next stage of privilege escalation. ASCII art display begins to show.
 
