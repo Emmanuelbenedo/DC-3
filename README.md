@@ -176,10 +176,8 @@ With root-level privileges successfully obtained, navigation to the /root direct
 ```bash
 cat /root/the-flag.txt
 ```
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2b218d1d-c7d4-4458-887c-b154a9b6103d" />
 
-**(VirtualBox_kali-1_12_08_2026_10_20_53.png)**
-
-![Flag retrieval and challenge completion confirmation](./screenshots/14-flag-retrieval.png)
 
 This screenshot shows the terminal output displaying the flag contents and final confirmation of system compromise. The visible commands show HTTP server setup on port 80 for payload distribution, successful privilege escalation messages, and the flag content beginning with ASCII art in the shape of letters repeated in pattern. The critical message "Congratulations are in order. :-)" is displayed, followed by "I hope you've enjoyed this challenge as I enjoyed making it. If there are any ways that I can improve these little challenges, please let me know. As per usual, comments and complaints can be sent via Twitter to @DCAU7 Have a great day!!!!" This flag confirms successful exploitation of the DC-3 machine, beginning with reconnaissance, proceeding through SQL injection vulnerability exploitation, achieving remote code execution via template modification, and culminating in privilege escalation through kernel exploit utilization.
 
