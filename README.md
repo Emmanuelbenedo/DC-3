@@ -117,9 +117,8 @@ Following the modification of error.php with PHP reverse shell code, the file wa
 curl http://192.168.56.110/templates/beez3/error.php
 ```
 
-**(VirtualBox_kali-1_04_08_2026_10_45_47.png)**
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/72dd604a-3c1b-4b28-9029-d691805235f6" />
 
-![curl command triggering the reverse shell payload](./screenshots/10-curl-execution.png)
 
 This screenshot shows terminal output with the curl command "curl http://192.168.56.110/templates/beez3/error.php" being executed. This command makes an HTTP request to the error.php file, triggering the execution of the injected PHP code. The execution of this file initiates the reverse shell connection to the attacker's listening netcat session on port 4444.
 
