@@ -18,7 +18,7 @@ This command performs several critical functions: the `-v` flag enables verbose 
 
 The scan revealed a single open port: TCP/80 hosting Apache httpd version 2.4.18 running on Ubuntu. The HTTP server identification is critical because it establishes the attack surface and narrows the potential exploitation vectors. Apache 2.4.18 on Ubuntu is identifiable to specific Ubuntu releases, which assists in determining available kernel vulnerabilities for later privilege escalation attempts.
 
-**Screenshot placement: Image 11 (Nmap scan results)**
+VirtualBox_kali_26_06_2026_09_25_59.png
 This screenshot shows the complete Nmap output including the discovery of port 80, Apache service identification, Joomla version detection, and system uptime information. The output explicitly displays "Apache httpd 2.4.18 (Ubuntu)" and reveals valuable information about the running kernel version and system configuration.
 
 ### Service Enumeration and Web Directory Discovery
