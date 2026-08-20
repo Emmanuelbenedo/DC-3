@@ -83,7 +83,8 @@ The exploit output demonstrates successful SQL injection exploitation. The extra
 
 With the extracted username "admin" from the SQL injection exploit, access attempts were made to the Joomla administrative control panel at http://192.168.56.110/administrator/. The reasoning for attempting access with the extracted credentials is straightforward: the SQL injection compromised the administrative account credentials, and the Joomla control panel provides a legitimate administrative interface for system management.
 
-**Screenshot placement: Image 2 (Joomla Control Panel login)**
+<img width="955" height="970" alt="image" src="https://github.com/user-attachments/assets/126a0130-4602-4f65-826f-a84aa879e368" />
+
 This screenshot displays the successful authentication to the Joomla administrative control panel. The browser URL shows "http://192.168.56.110/administrator/index.php", and the interface displays the Joomla 3.7.0 control panel. Visible elements include the "LOGGED-IN USERS" section showing "admin Administration" with a timestamp of "2026-07-03 09:19", and the "POPULAR ARTICLES" section showing "Welcome to DC-3". The green banner at the top displays post-installation messages, indicating this is a freshly configured system. This confirms that the extracted credentials were valid and active.
 
 ### Template Modification and Code Injection
