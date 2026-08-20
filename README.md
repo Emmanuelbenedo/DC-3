@@ -34,7 +34,8 @@ The reasoning for directory enumeration is foundational to web application testi
 
 The enumeration results revealed multiple accessible directories including `/administrator/`, `/bin/`, `/cache/`, `/components/`, `/images/`, `/templates/`, `/language/`, `/layouts/`, `/libraries/`, `/media/`, `/modules/`, `/plugins/`, `/server-status/`, and `/tmp/`. The presence of these directories is highly indicative of a Joomla installation, as each represents a standard component of the Joomla directory structure. More critically, the presence of `/administrator/` indicates an administrative interface, while `/templates/` suggests that template files—which often contain executable code—are stored in accessible locations.
 
-**Screenshot placement: Image 4 (Gobuster enumeration results)**
+<img width="1920" height="982" alt="image" src="https://github.com/user-attachments/assets/41e7a087-4ea3-4fe6-9125-03bc7a252df0" />
+
 This screenshot displays the Gobuster output showing all discovered directories. The critical elements visible include the status codes (301 for redirects, 200 for successful responses), directory sizes, and the URL construction showing http://192.168.56.110 as the base. The extensive directory listing demonstrates that the application structure is completely exposed, which is a significant configuration weakness.
 
 ### Vulnerability Assessment and CMS Identification
