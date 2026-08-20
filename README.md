@@ -93,7 +93,8 @@ Upon successful authentication to the administrative interface, the next objecti
 
 The exploitation strategy involved navigating to System → Templates → Beez3 template management interface. The Beez3 template is Joomla's built-in responsive template, making it a reliable target for modification. The error.php file within this template is specifically designed to handle error conditions and render error messages. Because this file is executed whenever errors occur, injecting PHP code into it creates a reliable code execution vector.
 
-**Screenshot placement: Image 3 (Template selection interface)**
+<img width="955" height="970" alt="image" src="https://github.com/user-attachments/assets/20ac968b-d0ee-4086-97bb-2b561b654de0" />
+
 This screenshot shows the Joomla administrative interface with the Templates section visible. The interface displays the "Articles: Edit" dialog showing the "Welcome to DC-3" article. The tabs visible include "Content", "Images and Links", "Options", "Publishing", "Configure Edit Screen", and "Permissions". On the right side, the Status shows "Published", and the Category is "- Uncategorised". This demonstrates navigation to the template editing interface where modifications can be made.
 
 ### Error.php File Modification
