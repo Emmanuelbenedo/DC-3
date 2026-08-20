@@ -91,17 +91,13 @@ Upon successful authentication to the administrative interface, the next objecti
 
 The exploitation strategy involved navigating to System → Templates → Beez3 template management interface. The Beez3 template is Joomla's built-in responsive template, making it a reliable target for modification. The error.php file within this template is specifically designed to handle error conditions and render error messages. Because this file is executed whenever errors occur, injecting PHP code into it creates a reliable code execution vector.
 
-**(VirtualBox_kali_03_07_2026_09_49_07.png)**
-
-![Template selection and article editing interface](./screenshots/07-template-articles-edit.png)
+<img width="955" height="970" alt="image" src="https://github.com/user-attachments/assets/66f979dc-3986-44be-9447-f04f4bb5a55e" />
 
 This screenshot shows the Joomla administrative interface demonstrating navigation through the system. The interface displays the "Articles: Edit" dialog and various editing options. The visible tabs include "Content", "Images and Links", "Options", "Publishing", "Configure Edit Screen", and "Permissions". On the right side, the Status shows "Published", and the Category is "- Uncategorised". This demonstrates navigation to the template editing interface where modifications can be made.
 
 ### Error.php File Modification
 
-**(VirtualBox_kali_03_07_2026_10_01_48.png)**
 
-![Template Beez3 customization interface showing file structure](./screenshots/08-template-customize-interface.png)
 
 This screenshot displays the Joomla template customization interface for the Beez3 template. The left sidebar shows various template components including "css", "html", "images", "javascript", "language", and individual PHP files including "component.php", "error.php", "index.php", "jsstrings.php", and "templateDetails.xml". The main editor panel shows "Editing file 'error.php' in template 'beez3'". The visible PHP code in the editor displays GPL license header and comments, confirming this is the error.php file that will be modified.
 
