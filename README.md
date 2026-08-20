@@ -143,10 +143,8 @@ cd ebpf_mapfd_doubleput_exploit
 ./compile.sh
 ./doubleput
 ```
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/207dd6e6-f0b7-439a-8481-24cb14730b66" />
 
-**(VirtualBox_kali-1_12_08_2026_10_18_56.png)**
-
-![Exploit download and extraction process](./screenshots/11-exploit-download-unzip.png)
 
 This screenshot shows terminal output displaying the download and extraction process. The visible commands show netcat listener establishment, connection from the target system (192.168.56.110), wget downloading the exploit archive with progress output, successful download completion and timestamp information, unzip extracting the archive, and directory navigation commands showing the transition into the exploit directory. This demonstrates the initial stages of acquiring and preparing the privilege escalation exploit.
 
