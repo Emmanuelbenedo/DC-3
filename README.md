@@ -70,9 +70,7 @@ The reasoning for SQL injection being such a critical vulnerability is that it b
 
 Exploitation of this vulnerability was achieved using a publicly available exploit obtained through searchsploit. The exploit facilitated direct query execution against the joomladb database, resulting in the extraction of sensitive credentials. The compromised credentials included administrative account information: username 'admin' with associated email 'freddy@norealaddress' and a bcrypt-hashed password token. Additionally, database connection parameters were recovered, revealing root access credentials for the MySQL database at localhost.
 
-**(VirtualBox_kali_03_07_2026_09_11_36.png)**
-
-![SQL Injection exploit results with extracted credentials](./screenshots/05-sql-injection-exploit.png)
+<img width="955" height="970" alt="image" src="https://github.com/user-attachments/assets/56bc4603-c551-4b4f-9b67-fb123af8d886" />
 
 This screenshot displays the Manu Joomla SQL Injection exploiter interface and results. The critical information visible includes a successful SQL injection attempt against the target 192.168.56.110 with extracted database credentials showing username "admin", database name "joomladb", database version "5.7.25-0ubuntu0.16.0", database username "root@localhost", a bcrypt password hash: "$2y$10$DfpYjADpejngxNh9GnmCeyIHCWpL97CVRnGeZsVJwR0kWFlIB1Zu", and an email address "freddy@norealaddress". The exploit output demonstrates successful SQL injection exploitation, revealing that the extracted username "admin" and password hash are the administrative credentials for the Joomla installation.
 
