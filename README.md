@@ -60,9 +60,7 @@ Research into known vulnerabilities affecting Joomla 3.7.0 was conducted using s
 searchsploit "Joomla 3.7.0 com_fields SQL Injection"
 ```
 
-**(VirtualBox_kali_30_06_2026_12_28_11.png)**
-
-![Searchsploit CVE-2017-8917 results](./screenshots/04-searchsploit-cve.png)
+<img width="1920" height="982" alt="image" src="https://github.com/user-attachments/assets/9ff8979e-8cf3-4c4f-93f0-54858fb476a1" />
 
 This identified CVE-2017-8917, a critical SQL injection vulnerability present in the `com_fields` component. The vulnerability exists because the component fails to adequately sanitize user-supplied input in the field parameter handling mechanism. Specifically, the vulnerability allows an unauthenticated attacker to inject arbitrary SQL code into requests targeting the component, enabling direct query execution against the backend database.
 
