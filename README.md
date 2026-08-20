@@ -117,7 +117,8 @@ Following the modification of error.php with PHP reverse shell code, the file wa
 curl http://192.168.56.110/templates/beez3/error.php
 ```
 
-**Screenshot placement: Image 10 (curl command execution)**
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c1c7c7ad-a9fe-46e5-a52c-89eca8b5370f" />
+
 This screenshot shows terminal output with the curl command "curl http://192.168.56.110/templates/beez3/error.php" being executed. This command makes an HTTP request to the error.php file, triggering the execution of the injected PHP code. The execution of this file initiates the reverse shell connection to the attacker's listening netcat session on port 4444.
 
 The reasoning for using curl to trigger the exploit is that it provides a simple, reliable method to execute the web request without requiring browser interaction. The PHP code within error.php executes server-side, so accessing the file through any HTTP client—whether curl, a browser, or any other method—will trigger the exploit.
