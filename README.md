@@ -168,7 +168,8 @@ Upon successful compilation, the `doubleput` binary was executed directly with r
 ./doubleput
 ```
 
-**Screenshot placement: Image 13 (Continued compilation and exploit execution)**
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/128adf90-559b-4d3d-8934-8ac4aa398be5" />
+
 This screenshot displays the continuation of the compilation process and the beginning of exploit execution. Visible text shows:
 - Compilation warnings regarding pointer casting operations
 - The message "starting writev"
