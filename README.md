@@ -97,6 +97,7 @@ This screenshot shows the Joomla administrative interface demonstrating navigati
 
 ### Error.php File Modification
 
+<img width="955" height="970" alt="image" src="https://github.com/user-attachments/assets/66cee97e-e90e-40af-9dd6-d66bf78d7cd5" />
 
 
 This screenshot displays the Joomla template customization interface for the Beez3 template. The left sidebar shows various template components including "css", "html", "images", "javascript", "language", and individual PHP files including "component.php", "error.php", "index.php", "jsstrings.php", and "templateDetails.xml". The main editor panel shows "Editing file 'error.php' in template 'beez3'". The visible PHP code in the editor displays GPL license header and comments, confirming this is the error.php file that will be modified.
