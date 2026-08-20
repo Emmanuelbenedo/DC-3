@@ -105,7 +105,8 @@ This screenshot displays the Joomla template customization interface for the Bee
 
 The error.php file modification involves injecting PHP code that, when executed, will establish a reverse shell connection to the attacker's machine. A reverse shell reverses the typical client-server relationship: instead of the attacker connecting to a listening port on the target system, the target system initiates an outbound connection to the attacker's machine and executes a shell through that connection.
 
-**Screenshot placement: Image 9 (error.php file in editor with potential code visible)**
+<img width="955" height="970" alt="image" src="https://github.com/user-attachments/assets/a0ed6362-05b5-4254-9494-f8238176a681" />
+
 This screenshot shows a continuation of the error.php file editing interface. The visible code displays lines 36-58 of the error.php file, showing sections labeled "// Limitations" and comments regarding proc_open and stream_set_blocking functions. Most critically, visible on line 49 is `$ip = '192.168.56.108';` and line 50 shows `$port = 4444;` with a comment "// CHANGE THIS". These represent the attacker configuration parameters for the reverse shell payload, indicating that IP address 192.168.56.108 (the attacker machine) and port 4444 have been configured as the target for the reverse shell connection.
 
 ### Remote Code Execution Verification
